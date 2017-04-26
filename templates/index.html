@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City Data Visulation</title>
+</head>
+<body>
+<div id="map" style="width:1366px;height:768px"></div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=AC0faf7fb425880a7d51361b33c0f4de"></script>
+
+<script>
+    var map = new BMap.Map('map');
+    map.enableScrollWheelZoom(true);
+    map.centerAndZoom(new BMap.Point(121.491, 31.233), 9);
+    var bdary = new BMap.Boundary();
+
+    $.get('/cities', function (data) {
+        $.each(data, function (key, val) {
+
+            bdary.get(key, function (rs) { //获取行政区域
+                var count = rs.boundaries.length; //有多少个地理区间
+                for (var i = 0; i < count; i++) {
+
+                    var ply = new BMap.Polygon(rs.boundaries[i],
+                        {
+                            strokeWeight: 1,
+                            strokeOpacity: 1,
+                            StrokeStyle: "solid",
+                            strokeColor: "#FF0000",
+                            fillColor: val,
+                            fillOpacity: 0.8
+                        }); //建立多边形覆盖物
+
+                    map.addOverlay(ply); //添加覆盖物
+                } ;
+            });
+        });
+    });
+
+</script>
+</body>
+</html>
