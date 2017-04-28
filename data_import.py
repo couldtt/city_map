@@ -27,7 +27,9 @@ with app.app_context():
     for record in data:
         city = City.query.filter_by(area=record['城市']).first()
         if not city:
-            city = City(record['城市'])
+            city = City()
+
+        city.area = record['城市']
         city.population = int(record['accrual_money'])
         db.session.add(city)
 

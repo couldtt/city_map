@@ -1,8 +1,14 @@
 import random
 from flask import jsonify, render_template
+from flask_admin import Admin
+
 from init import app, db
 from models import City
+from admin import CityView
 
+
+admin = Admin(app, name='CityMap', template_mode='bootstrap3')
+admin.add_view(CityView(City, db.session, name='地域设置', category='区域分析'))
 
 def processing(q):
     city_map = {}
